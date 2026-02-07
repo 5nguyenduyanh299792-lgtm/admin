@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>OCEAN EDU ADMIN</title>
+    <title>OCEAN EDU RESEARCH DASHBOARD</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,38 +11,33 @@
 
     <style>
         :root {
-            /* MÀU ĐỒNG BỘ VỚI TRANG KHẢO SÁT */
             --primary: #00c6ff;
             --primary-dark: #0072ff;
             --glass-bg: rgba(255, 255, 255, 0.95);
-            --glass-border: rgba(255, 255, 255, 0.8);
             --text: #0f172a;
             --text-light: #64748b;
-            --accent-orange: #f59e0b;
-            --accent-green: #10b981;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%); /* Nền xanh biển */
-            min-height: 100vh; color: var(--text);
-            padding-bottom: 80px; overflow-x: hidden;
+            background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            min-height: 100vh; color: var(--text); padding-bottom: 80px; overflow-x: hidden;
         }
 
         /* HEADER */
         .header {
             position: sticky; top: 0; z-index: 100;
             background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
-            border-bottom: 1px solid white;
-            padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
-        .logo { font-size: 22px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        .logo { font-size: 20px; font-weight: 800; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
         
         .nav-tabs { display: flex; gap: 8px; background: #f1f5f9; padding: 5px; border-radius: 50px; }
         .tab-btn {
-            padding: 8px 24px; border-radius: 40px; border: none; background: transparent; color: var(--text-light);
+            padding: 8px 20px; border-radius: 40px; border: none; background: transparent; color: var(--text-light);
             font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 14px; display: flex; gap: 6px; align-items: center;
         }
         .tab-btn.active { background: white; color: var(--primary-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -52,84 +47,40 @@
         .view-section.active { display: block; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* === VIEW 1: CHI TIẾT === */
-        .response-card {
-            background: var(--glass-bg); border: 2px solid white; border-radius: 30px;
-            display: flex; overflow: hidden; min-height: 70vh; 
-            box-shadow: 0 20px 60px rgba(0, 72, 255, 0.2);
+        /* RESEARCH TABLES & CHARTS STYLES */
+        .section-title {
+            font-size: 18px; font-weight: 800; color: white; margin: 40px 0 20px 0;
+            text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 10px;
         }
-        .profile-sidebar {
-            width: 320px; background: #f8fafc; border-right: 1px solid #e2e8f0;
-            padding: 40px 30px; display: flex; flex-direction: column; align-items: center; text-align: center;
-        }
-        .avatar {
-            width: 110px; height: 110px; border-radius: 50%; margin-bottom: 20px;
-            background: white; border: 4px solid var(--primary);
-            display: flex; justify-content: center; align-items: center; font-size: 50px; color: var(--primary-dark);
-            box-shadow: 0 10px 25px rgba(0, 114, 255, 0.2);
-        }
-        .meta-tag { background: white; padding: 8px 16px; border-radius: 12px; font-size: 14px; margin: 6px 0; color: var(--text); font-weight: 600; box-shadow: 0 2px 5px rgba(0,0,0,0.03); width: 100%; }
         
-        .answer-area { flex: 1; padding: 0; overflow-y: auto; height: 70vh; scroll-behavior: smooth; background: white; }
-        
-        .q-group-title {
-            position: sticky; top: 0; background: rgba(255,255,255,0.95); backdrop-filter: blur(5px);
-            padding: 20px 30px; font-weight: 800; color: var(--primary-dark); 
-            border-bottom: 2px solid #f1f5f9; z-index: 10; font-size: 16px; text-transform: uppercase;
+        .research-card {
+            background: white; border-radius: 20px; padding: 25px; margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid rgba(255,255,255,0.5);
         }
-        .q-item { padding: 15px 30px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; }
-        .q-text { font-size: 15px; color: #334155; width: 65%; font-weight: 500; }
-        
-        /* Bar Visual inside Detail */
-        .bar-wrap { width: 120px; height: 10px; background: #e2e8f0; border-radius: 6px; overflow: hidden; margin-right: 15px; }
-        .bar-val { height: 100%; background: var(--primary-dark); border-radius: 6px; transition: 0.5s; }
-        .score-box { display: flex; align-items: center; }
-        .score-txt { font-weight: 800; color: var(--primary-dark); width: 25px; text-align: right; font-size: 16px; }
+        .chart-header {
+            font-size: 16px; font-weight: 700; color: var(--primary-dark); margin-bottom: 20px;
+            padding-bottom: 10px; border-bottom: 2px solid #f1f5f9; display: flex; justify-content: space-between;
+        }
 
-        /* Control Dock */
-        .dock {
-            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 8px 12px; border-radius: 60px; display: flex; gap: 10px; align-items: center;
-            box-shadow: 0 15px 40px rgba(0, 72, 255, 0.4); z-index: 200;
-        }
-        .dock-btn { width: 45px; height: 45px; border-radius: 50%; background: #f1f5f9; color: var(--text); border: none; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .dock-btn:hover { background: var(--primary-dark); color: white; transform: translateY(-3px); }
-        .dock-info { color: var(--text); font-weight: 700; font-size: 16px; padding: 0 15px; }
+        /* TABLE 3.1 STYLE */
+        .demo-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .demo-table th { background: #f1f5f9; color: var(--primary-dark); padding: 12px; text-align: left; font-weight: 800; }
+        .demo-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; color: var(--text); }
+        .demo-table tr:last-child td { border-bottom: none; }
+        .badge { background: #e0f2fe; color: var(--primary-dark); padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 12px; }
 
-        /* === VIEW 2: STATISTICS === */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 25px; margin-bottom: 30px; }
-        .kpi-card {
-            background: white; padding: 25px; border-radius: 25px; 
-            text-align: center; position: relative; overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        .kpi-num { font-size: 42px; font-weight: 800; color: var(--primary-dark); line-height: 1; margin-bottom: 5px; }
-        .kpi-lbl { font-size: 13px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        /* VIEW 1 STYLES (KEEPING SIMPLE) */
+        .response-card { background: var(--glass-bg); border-radius: 30px; display: flex; overflow: hidden; min-height: 70vh; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        .profile-sidebar { width: 300px; background: #f8fafc; padding: 30px; text-align: center; border-right: 1px solid #e2e8f0; }
+        .answer-area { flex: 1; padding: 20px; overflow-y: auto; height: 70vh; }
+        .avatar { width: 100px; height: 100px; background: white; border-radius: 50%; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: var(--primary-dark); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; }
-        .chart-card {
-            background: white; border-radius: 25px; padding: 25px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-        .chart-header { font-size: 17px; font-weight: 800; color: var(--text); margin-bottom: 20px; display: flex; justify-content: space-between; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        /* LOADING */
+        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         
-        /* Loading */
-        #loader {
-            position: fixed; inset: 0; background: rgba(255,255,255,0.9); z-index: 9999;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-        }
-        .loader-spinner {
-            width: 60px; height: 60px; border: 6px solid #e2e8f0; border-top-color: var(--primary-dark);
-            border-radius: 50%; animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
         @media(max-width: 768px) {
-            .response-card { flex-direction: column; height: auto; border-radius: 20px; }
-            .profile-sidebar { width: 100%; padding: 25px; border-right: none; border-bottom: 1px solid #e2e8f0; height: auto; }
-            .answer-area { height: auto; max-height: 60vh; }
-            .charts-grid { grid-template-columns: 1fr; }
-            .dock { width: 90%; justify-content: space-between; }
+            .response-card { flex-direction: column; height: auto; }
+            .profile-sidebar { width: 100%; border-right: none; border-bottom: 1px solid #e2e8f0; }
         }
     </style>
 </head>
@@ -137,126 +88,161 @@
 
     <!-- HEADER -->
     <div class="header">
-        <div class="logo"><i class="ri-bar-chart-grouped-fill"></i> OCEAN ANALYTICS</div>
+        <div class="logo"><i class="ri-article-line"></i> OCEAN RESEARCH</div>
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('detail')"><i class="ri-file-user-line"></i> Phiếu</button>
-            <button class="tab-btn" onclick="switchTab('stats')"><i class="ri-pie-chart-2-line"></i> Báo Cáo</button>
+            <button class="tab-btn active" onclick="switchTab('detail')"><i class="ri-file-search-line"></i> Raw Data</button>
+            <button class="tab-btn" onclick="switchTab('stats')"><i class="ri-bar-chart-grouped-line"></i> Research Analysis</button>
         </div>
     </div>
 
-    <!-- LOADING SCREEN -->
+    <!-- LOADING -->
     <div id="loader">
-        <div class="loader-spinner"></div>
-        <div style="margin-top: 20px; color: var(--primary-dark); font-weight: 700; letter-spacing: 1px;">ĐANG TẢI DỮ LIỆU...</div>
+        <div style="font-weight: 800; font-size: 20px; color: var(--primary-dark);">LOADING DATA...</div>
     </div>
 
-    <!-- VIEW 1: CHI TIẾT PHIẾU -->
+    <!-- === VIEW 1: RAW DATA (CHI TIẾT PHIẾU) === -->
     <div id="view-detail" class="view-section active">
-        <div class="response-card">
-            <!-- Sidebar Info -->
-            <div class="profile-sidebar">
-                <div class="avatar" id="uAvatar"><i class="ri-user-smile-line"></i></div>
-                <h2 id="uAge" style="color: var(--text); margin-bottom: 5px;">--</h2>
-                <div class="meta-tag" id="uGender" style="background: #e0f2fe; color: #0284c7;">--</div>
-                <div class="meta-tag" id="uDuration" style="background: #f0fdf4; color: #15803d;">--</div>
-                <div class="meta-tag" id="uDate" style="background: #f8fafc; color: #94a3b8; font-weight:500;">--/--/----</div>
+        <div class="research-card" style="background: rgba(255,255,255,0.2); border: none; box-shadow: none;">
+            <div class="response-card">
+                <div class="profile-sidebar">
+                    <div class="avatar" id="uAvatar"><i class="ri-user-line"></i></div>
+                    <h2 id="uAge">--</h2>
+                    <div style="margin-top:10px; color:#64748b" id="uGender">--</div>
+                    <div style="margin-top:5px; font-weight:700; color:var(--primary-dark)" id="uDuration">--</div>
+                    
+                    <div style="margin-top:30px; display:flex; gap:10px; justify-content:center;">
+                        <button onclick="nav(-1)" style="padding:10px 20px; border-radius:20px; border:none; cursor:pointer;">Prev</button>
+                        <div id="curIdx" style="padding:10px; font-weight:bold;">1</div>
+                        <button onclick="nav(1)" style="padding:10px 20px; border-radius:20px; border:1px solid #ccc; cursor:pointer; background:white;">Next</button>
+                    </div>
+                </div>
+                <div class="answer-area" id="detailContent"></div>
             </div>
-            
-            <!-- Answers List -->
-            <div class="answer-area" id="detailContent">
-                <!-- Content injected via JS -->
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="dock">
-            <button class="dock-btn" onclick="nav(-1)"><i class="ri-arrow-left-s-line"></i></button>
-            <div class="dock-info"><span id="curIdx" style="color:var(--primary-dark); font-weight:800; font-size:20px;">1</span> / <span id="totalIdx">--</span></div>
-            <button class="dock-btn" onclick="nav(1)"><i class="ri-arrow-right-s-line"></i></button>
         </div>
     </div>
 
-    <!-- VIEW 2: THỐNG KÊ -->
+    <!-- === VIEW 2: RESEARCH ANALYSIS (6 CHARTS + 1 TABLE) === -->
     <div id="view-stats" class="view-section">
-        <!-- KPI -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-num" id="statTotal">0</div>
-                <div class="kpi-lbl">Tổng phiếu thu được</div>
+        
+        <div class="section-title"><i class="ri-table-line"></i> DEMOGRAPHIC ANALYSIS</div>
+        
+        <!-- 1. Table 3.1: Demographic Profiles -->
+        <div class="research-card">
+            <div class="chart-header">
+                <span>Table 3.1: Demographic Profiles of the Participants (N=<span id="totalN">0</span>)</span>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-num" id="statAvgAge" style="color:#f59e0b">--</div>
-                <div class="kpi-lbl">Độ tuổi phổ biến nhất</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-num" id="statAvgScore" style="color:#10b981">0.0 / 5</div>
-                <div class="kpi-lbl">Điểm động lực TB</div>
+            <table class="demo-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Sub-category</th>
+                        <th style="text-align:center;">Frequency (n)</th>
+                        <th style="text-align:center;">Percentage (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="demoTableBody">
+                    <!-- JS will render this -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-title"><i class="ri-bar-chart-box-line"></i> MOTIVATION ANALYSIS (RQ1)</div>
+
+        <!-- 2. Chart 3.1: Item-level Analysis -->
+        <div class="research-card">
+            <div class="chart-header">Chart 3.1: Item-level Analysis of English Speaking Motivation (Mean Scores)</div>
+            <canvas id="chartItemAnalysis" height="120"></canvas>
+            <div style="font-size:13px; color:#64748b; margin-top:10px; font-style:italic; text-align:center;">
+                Scale: 1 = Strongly Disagree, 5 = Strongly Agree
             </div>
         </div>
 
-        <div class="charts-grid">
-             <!-- 1. Radar Analysis (Quan trọng nhất) -->
-             <div class="chart-card">
-                <div class="chart-header">
-                    <span>Phân tích Yếu tố (Radar)</span>
-                    <i class="ri-radar-line" style="color:var(--primary-dark)"></i>
-                </div>
-                <canvas id="chartRadar"></canvas>
-            </div>
-
-            <!-- 2. Motivation Breakdown -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <span>Chi tiết Đánh giá (Likert Scale)</span>
-                    <i class="ri-bar-chart-horizontal-line" style="color:var(--primary-dark)"></i>
-                </div>
-                <canvas id="chartLikert"></canvas>
-            </div>
-
-            <!-- 3. Demographic -->
-            <div class="chart-card">
-                <div class="chart-header">Độ tuổi (Age)</div>
-                <canvas id="chartAge"></canvas>
-            </div>
-
-            <!-- 4. Activities -->
-            <div class="chart-card">
-                <div class="chart-header">Hoạt động yêu thích</div>
-                <canvas id="chartActivities"></canvas>
-            </div>
-
-             <!-- 5. Feedback -->
-             <div class="chart-card" style="grid-column: span 1 / -1;">
-                <div class="chart-header">Feedback Gần Đây</div>
-                <div id="feedbackList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:15px; max-height: 250px; overflow-y: auto;"></div>
+        <!-- 3. Chart 3.2: Intrinsic vs Extrinsic -->
+        <div class="research-card">
+            <div class="chart-header">Chart 3.2: Comparison Between Intrinsic and Extrinsic Motivation</div>
+            <div style="width: 100%; max-width: 600px; margin: 0 auto;">
+                <canvas id="chartInVsEx"></canvas>
             </div>
         </div>
+
+        <div class="section-title"><i class="ri-mind-map"></i> FACTORS & SOLUTIONS (RQ2 & RQ3)</div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px;">
+            <!-- 4. Chart 3.3: Internal Factors -->
+            <div class="research-card">
+                <div class="chart-header">Chart 3.3: Psychological Barriers (Internal Factors)</div>
+                <canvas id="chartInternal"></canvas>
+            </div>
+
+            <!-- 5. Chart 3.4: External Factors -->
+            <div class="research-card">
+                <div class="chart-header">Chart 3.4: Impact of Learning Environment (External)</div>
+                <canvas id="chartExternal"></canvas>
+            </div>
+        </div>
+
+        <!-- 6. Chart 3.5: Activities Preferences -->
+        <div class="research-card">
+            <div class="chart-header">Chart 3.5: Students' Preferences for Classroom Activities (RQ3)</div>
+            <canvas id="chartActivities" height="100"></canvas>
+        </div>
+
+        <!-- 7. Chart 3.6: Feedback Categorization -->
+        <div class="research-card">
+            <div class="chart-header">Chart 3.6: Categorization of Student Feedback (Qualitative Analysis)</div>
+            <canvas id="chartFeedback" height="120"></canvas>
+        </div>
+
     </div>
 
     <script>
-        // === LINK CỦA BẠN (Dán đè link mới vào đây nếu có) ===
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyg7-yAjQoN9NcU7VO5_iB1LHtLKBmWbGLrdKkpymuRcBEMoNLBBhVmYZVz_4ihhlcEzg/exec'; 
+        // === PASTE LINK MỚI CỦA BẠN VÀO ĐÂY ===
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyg7-yAjQoN9NcU7VO5_iB1LHtLKBmWbGLrdKkpymuRcBEMoNLBBhVmYZVz_4ihhlcEzg/exec';
 
-        // CONFIG
-        const likertText = {
-            A1: "Thích diễn đạt ý tưởng", A2: "Vui vẻ khi nói", A3: "Muốn hiểu văn hóa",
-            B1: "Vì điểm số/thưởng", B2: "Cha mẹ kỳ vọng", B3: "Vì công việc/du học",
-            C1: "Lo lắng/Ngại", C2: "Sợ sai ngữ pháp", C3: "Tin bản thân",
-            D1: "GV thân thiện", D2: "Thiết bị hiện đại", D3: "Quay video hữu ích", D4: "Nhóm bạn tốt"
-        };
-        const groups = {
-            "Intrinsic (Bên trong)": ['A1', 'A2', 'A3'],
-            "Extrinsic (Bên ngoài)": ['B1', 'B2', 'B3'],
-            "Internal (Tâm lý)": ['C1', 'C2', 'C3'],
-            "External (Môi trường)": ['D1', 'D2', 'D3', 'D4']
+        // --- GLOBAL VARS ---
+        let rawData = [], headers = [];
+        let currentIndex = 0;
+
+        // --- MAPS ---
+        const likertKeys = {
+            Intrinsic: ['A1', 'A2', 'A3'],
+            Extrinsic: ['B1', 'B2', 'B3'],
+            Internal: ['C1', 'C2', 'C3'],
+            External: ['D1', 'D2', 'D3', 'D4']
         };
 
-        let rawData = [], headers = [], currentIndex = 0;
+        const itemLabels = {
+            A1: "A1. Express Ideas", A2: "A2. Enjoyment", A3: "A3. Culture/Media",
+            B1: "B1. Marks/Rewards", B2: "B2. Expectations", B3: "B3. Career/Study",
+            C1: "C1. Nervous/Shy", C2: "C2. Fear Mistakes", C3: "C3. Self-Belief",
+            D1: "D1. Teachers", D2: "D2. Equipment", D3: "D3. Video Recording", D4: "D4. Group Work"
+        };
 
-        // --- HÀM TÌM CỘT THÔNG MINH (FIX LỖI DATA = 0) ---
-        // Hàm này tìm vị trí cột bắt đầu bằng "A1", "B1"... bất kể tên đầy đủ là gì
-        function getColIndex(prefix) {
-            return headers.findIndex(h => h.toString().trim().startsWith(prefix));
+        // --- HELPER FUNCTIONS ---
+        // 1. Get Column Data by Fuzzy Name
+        function getColData(prefix) {
+            const idx = headers.findIndex(h => h.toString().trim().startsWith(prefix));
+            if (idx === -1) return [];
+            return rawData.map(r => r[idx]);
+        }
+
+        // 2. Count Frequencies for Table 3.1
+        function getFrequency(colPrefix) {
+            const data = getColData(colPrefix);
+            const counts = {};
+            data.forEach(x => { if(x) counts[x] = (counts[x] || 0) + 1; });
+            return counts;
+        }
+
+        // 3. Calculate Mean (Average) for Charts
+        function calculateMean(colPrefix) {
+            const data = getColData(colPrefix);
+            let sum = 0, count = 0;
+            data.forEach(v => {
+                const num = parseFloat(v);
+                if (!isNaN(num)) { sum += num; count++; }
+            });
+            return count > 0 ? (sum / count).toFixed(2) : 0;
         }
 
         // --- INIT ---
@@ -267,247 +253,207 @@
                 
                 headers = data[0];
                 rawData = data.slice(1);
-
-                document.getElementById('totalIdx').innerText = rawData.length;
-                document.getElementById('statTotal').innerText = rawData.length;
+                
+                document.getElementById('totalN').innerText = rawData.length;
                 document.getElementById('loader').style.display = 'none';
 
-                // Render
-                currentIndex = rawData.length - 1; 
-                renderDetail(currentIndex);
-                renderCharts();
+                // Render Views
+                renderDetail(rawData.length - 1);
+                renderResearchAnalysis();
 
             } catch (err) {
+                document.getElementById('loader').innerHTML = `<div style="color:red">ERROR LOADING DATA</div>`;
                 console.error(err);
-                document.getElementById('loader').innerHTML = `<div style="color:red; font-weight:bold;">LỖI TẢI DỮ LIỆU<br>Kiểm tra lại Link Script!</div>`;
             }
         };
 
-        // --- TABS ---
         function switchTab(t) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${t}`).classList.add('active');
             event.currentTarget.classList.add('active');
-            if(t === 'stats') window.dispatchEvent(new Event('resize')); 
         }
 
-        // --- RENDER DETAIL ---
+        // --- RENDER DETAIL (SIMPLE VIEW) ---
         function renderDetail(idx) {
-            if (idx < 0 || idx >= rawData.length) return;
+            if(idx < 0 || idx >= rawData.length) return;
             const row = rawData[idx];
-
-            // Helper để lấy giá trị theo tên cột (VD: Gender) hoặc Prefix (VD: A1)
-            const getVal = (key) => {
-                let i = headers.indexOf(key); // Tìm chính xác
-                if (i === -1) i = getColIndex(key); // Tìm theo prefix
-                return i !== -1 ? row[i] : "";
-            };
-
+            
+            // Basic mapping for detail view... (simplified for brevity)
+            const getVal = (k) => {
+                const i = headers.findIndex(h => h.startsWith(k));
+                return i !== -1 ? row[i] : '--';
+            }
+            document.getElementById('uAge').innerText = "Age: " + getVal('Age');
+            document.getElementById('uGender').innerText = getVal('Gender');
+            document.getElementById('uDuration').innerText = getVal('Duration');
             document.getElementById('curIdx').innerText = idx + 1;
             
-            // Profile
-            document.getElementById('uAge').innerText = "Tuổi: " + getVal('Age');
-            document.getElementById('uGender').innerText = getVal('Gender');
-            document.getElementById('uDuration').innerHTML = `Học: ${getVal('Duration')}`;
-            
-            const d = new Date(row[0]);
-            document.getElementById('uDate').innerText = `${d.getHours()}:${String(d.getMinutes()).padStart(2,'0')} - ${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
-            
-            // Avatar Color
-            const gender = getVal('Gender');
-            const avaEl = document.getElementById('uAvatar');
-            avaEl.innerHTML = (gender === 'Male' || gender === 'Nam') ? '<i class="ri-men-line"></i>' : '<i class="ri-women-line"></i>';
-            avaEl.style.color = (gender === 'Male' || gender === 'Nam') ? '#3b82f6' : '#ec4899';
-            avaEl.style.borderColor = (gender === 'Male' || gender === 'Nam') ? '#3b82f6' : '#ec4899';
-
-            // Content
-            const cont = document.getElementById('detailContent');
-            cont.innerHTML = '';
-
-            for (const [gName, cols] of Object.entries(groups)) {
-                let html = `<div class="q-group-title">${gName}</div>`;
-                cols.forEach(prefix => {
-                    const val = parseInt(getVal(prefix)) || 0; // Quan trọng: parseInt
-                    const pct = (val / 5) * 100;
-                    const color = val >= 4 ? '#10b981' : (val <= 2 ? '#ef4444' : '#3b82f6');
-                    
-                    html += `
-                    <div class="q-item">
-                        <div class="q-text"><b>${prefix}:</b> ${likertText[prefix]}</div>
-                        <div class="score-box">
-                            <div class="bar-wrap"><div class="bar-val" style="width:${pct}%; background:${color}"></div></div>
-                            <div class="score-txt">${val}</div>
-                        </div>
-                    </div>`;
-                });
-                cont.innerHTML += html;
-            }
+            let html = '<div style="background:white; padding:15px; border-radius:10px;">';
+            html += `<b>Activities:</b> ${getVal('Activities')}<br><br>`;
+            html += `<b>Feedback:</b> "${getVal('Feedback')}"`;
+            html += '</div>';
+            document.getElementById('detailContent').innerHTML = html;
         }
+        function nav(d) { currentIndex += d; renderDetail(currentIndex); }
 
-        function nav(dir) {
-            currentIndex += dir;
-            if(currentIndex < 0) currentIndex = 0;
-            if(currentIndex >= rawData.length) currentIndex = rawData.length - 1;
-            renderDetail(currentIndex);
-        }
 
-        // --- STATS (CHART.JS) ---
-        function renderCharts() {
+        // --- MAIN: RESEARCH ANALYSIS RENDERER ---
+        function renderResearchAnalysis() {
             Chart.defaults.font.family = 'Quicksand';
-            Chart.defaults.color = '#64748b';
+            Chart.defaults.color = '#334155';
             Chart.register(ChartDataLabels);
 
-            // Helpers
-            const getVals = (prefix) => {
-                const i = getColIndex(prefix);
-                if (i === -1) return [];
-                return rawData.map(r => r[i]);
-            };
-            
-            const countFreq = (arr) => {
-                const c = {};
-                arr.forEach(x => { if(x) c[x] = (c[x]||0) + 1; });
-                return c;
-            };
+            // ==========================================
+            // 1. TABLE 3.1: DEMOGRAPHICS
+            // ==========================================
+            const ageCounts = getFrequency('Age');
+            const genderCounts = getFrequency('Gender');
+            const durCounts = getFrequency('Duration');
+            const total = rawData.length;
 
-            // 1. RADAR CHART (Average Scores)
-            const groupScores = [];
-            let totalAvg = 0;
-            
-            for(const [name, cols] of Object.entries(groups)) {
-                let sum = 0, count = 0;
-                cols.forEach(prefix => {
-                    const vals = getVals(prefix);
-                    vals.forEach(v => { sum += (parseInt(v)||0); count++; });
-                });
-                const avg = count ? (sum/count).toFixed(2) : 0;
-                groupScores.push(avg);
-                totalAvg += parseFloat(avg);
+            function renderRow(cat, sub, counts) {
+                const n = counts[sub] || 0;
+                const pct = ((n / total) * 100).toFixed(1);
+                return `<tr><td>${cat}</td><td>${sub}</td><td style="text-align:center;">${n}</td><td style="text-align:center;"><span class="badge">${pct}%</span></td></tr>`;
             }
-            
-            document.getElementById('statAvgScore').innerText = (totalAvg / 4).toFixed(1) + " / 5";
 
-            new Chart(document.getElementById('chartRadar'), {
-                type: 'radar',
+            let tableHTML = '';
+            // Age Rows
+            tableHTML += renderRow('Age', '12-13', ageCounts);
+            tableHTML += renderRow('', '14-15', ageCounts);
+            tableHTML += renderRow('', '16', ageCounts);
+            // Gender Rows
+            tableHTML += renderRow('Gender', 'Male', genderCounts);
+            tableHTML += renderRow('', 'Female', genderCounts);
+            // Duration Rows
+            tableHTML += renderRow('Duration', '<6m', durCounts);
+            tableHTML += renderRow('', '6m-1y', durCounts);
+            tableHTML += renderRow('', '>1y', durCounts);
+
+            document.getElementById('demoTableBody').innerHTML = tableHTML;
+
+            // ==========================================
+            // 2. CHART 3.1: ITEM-LEVEL ANALYSIS (MEAN)
+            // ==========================================
+            const items = [...likertKeys.Intrinsic, ...likertKeys.Extrinsic];
+            const itemMeans = items.map(k => calculateMean(k));
+
+            new Chart(document.getElementById('chartItemAnalysis'), {
+                type: 'bar',
                 data: {
-                    labels: ['Intrinsic\n(Bên trong)', 'Extrinsic\n(Bên ngoài)', 'Internal\n(Tâm lý)', 'External\n(Môi trường)'],
+                    labels: items.map(k => itemLabels[k].split('. ')[0]), // A1, A2...
                     datasets: [{
-                        label: 'Điểm trung bình',
-                        data: groupScores,
-                        backgroundColor: 'rgba(0, 198, 255, 0.2)',
-                        borderColor: '#0072ff',
-                        pointBackgroundColor: '#0072ff',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#0072ff'
+                        label: 'Mean Score',
+                        data: itemMeans,
+                        backgroundColor: items.map((_, i) => i < 3 ? '#00c6ff' : '#0072ff'), // Light blue for Intrinsic, Dark for Extrinsic
+                        borderRadius: 5
                     }]
                 },
                 options: {
-                    scales: {
-                        r: {
-                            angleLines: { color: '#e2e8f0' },
-                            grid: { color: '#e2e8f0' },
-                            pointLabels: { font: {size: 13, weight: 'bold'}, color: '#334155' },
-                            suggestedMin: 1, suggestedMax: 5
-                        }
-                    },
                     plugins: { 
                         legend: { display: false },
-                        datalabels: { 
-                            backgroundColor: 'white', 
-                            borderRadius: 4, 
-                            font: {weight: 'bold'}, 
-                            color: '#0072ff',
-                            borderWidth: 1,
-                            borderColor: '#0072ff'
-                        } 
-                    }
+                        datalabels: { anchor: 'end', align: 'end', color: '#0072ff', font: {weight: 'bold'} }
+                    },
+                    scales: { y: { min: 1, max: 5 } }
                 }
             });
 
-            // 2. LIKERT DISTRIBUTION
-            const allPrefixes = [...groups["Intrinsic (Bên trong)"], ...groups["Extrinsic (Bên ngoài)"], ...groups["Internal (Tâm lý)"], ...groups["External (Môi trường)"]];
-            
-            const stacks = [1,2,3,4,5].map((score, i) => {
-                const colors = ['#ef4444', '#f97316', '#fbbf24', '#3b82f6', '#10b981'];
-                return {
-                    label: score + ' ⭐',
-                    data: allPrefixes.map(p => {
-                        const vals = getVals(p);
-                        return vals.filter(v => v == score).length;
-                    }),
-                    backgroundColor: colors[i],
-                    borderRadius: 2
-                };
-            });
+            // ==========================================
+            // 3. CHART 3.2: INTRINSIC VS EXTRINSIC
+            // ==========================================
+            const meanIn = (itemMeans.slice(0,3).reduce((a,b)=>parseFloat(a)+parseFloat(b),0) / 3).toFixed(2);
+            const meanEx = (itemMeans.slice(3,6).reduce((a,b)=>parseFloat(a)+parseFloat(b),0) / 3).toFixed(2);
 
-            new Chart(document.getElementById('chartLikert'), {
-                type: 'bar',
-                data: { labels: allPrefixes, datasets: stacks },
-                options: {
-                    responsive: true,
-                    scales: { x: { stacked: true }, y: { stacked: true } },
-                    plugins: {
-                        legend: { position: 'top' },
-                        datalabels: { display: false }
-                    }
-                }
-            });
-
-            // 3. PIE AGE & ACTIVITIES
-            // Age
-            const ageData = countFreq(getVals('Age')); // Hoặc dùng getColIndex('Age') nếu tên cột khác
-            // Nếu cột Age không tìm thấy bằng getVals, thử tìm chính xác:
-            const ageIdx = headers.indexOf('Age');
-            const ageVals = ageIdx !== -1 ? rawData.map(r => r[ageIdx]) : [];
-            const ageCounts = countFreq(ageVals);
-
-            // Find max Age
-            if(Object.keys(ageCounts).length) {
-                const topAge = Object.keys(ageCounts).reduce((a, b) => ageCounts[a] > ageCounts[b] ? a : b);
-                document.getElementById('statAvgAge').innerText = topAge;
-            }
-
-            new Chart(document.getElementById('chartAge'), {
-                type: 'pie',
+            new Chart(document.getElementById('chartInVsEx'), {
+                type: 'radar',
                 data: {
-                    labels: Object.keys(ageCounts),
+                    labels: ['Intrinsic Motivation', 'Extrinsic Motivation', 'Confidence (Self-belief)', 'Fear/Anxiety'],
                     datasets: [{
-                        data: Object.values(ageCounts),
-                        backgroundColor: ['#3b82f6', '#06b6d4', '#ec4899'],
-                        borderWidth: 2, borderColor: '#fff'
+                        label: 'Overall Mean',
+                        // Logic: Intrinsic, Extrinsic, C3 (Belief), Avg(C1,C2) (Fear)
+                        data: [meanIn, meanEx, calculateMean('C3'), (parseFloat(calculateMean('C1'))+parseFloat(calculateMean('C2')))/2],
+                        backgroundColor: 'rgba(0, 198, 255, 0.2)',
+                        borderColor: '#00c6ff',
+                        pointBackgroundColor: '#0072ff'
                     }]
                 },
                 options: {
-                    plugins: {
-                        legend: { position: 'right' },
-                        datalabels: { color: '#fff', font:{weight:'bold'}, formatter: (v, ctx) => {
-                            let sum = ctx.dataset.data.reduce((a,b)=>a+b,0);
-                            return (v*100/sum).toFixed(0) + "%";
-                        }}
-                    }
+                    scales: { r: { min: 0, max: 5, pointLabels: { font: {size: 14} } } }
                 }
             });
 
-            // Activities
-            const actIdx = headers.indexOf('Activities'); // Cột R
-            const actRaw = actIdx !== -1 ? rawData.map(r => r[actIdx]) : [];
+            // ==========================================
+            // 4. CHART 3.3: INTERNAL FACTORS (PSYCHOLOGICAL)
+            // ==========================================
+            const internalItems = likertKeys.Internal; // C1, C2, C3
+            const internalMeans = internalItems.map(k => calculateMean(k));
+
+            new Chart(document.getElementById('chartInternal'), {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: internalItems.map(k => itemLabels[k]), // Full text labels
+                    datasets: [{
+                        label: 'Mean Score',
+                        data: internalMeans,
+                        backgroundColor: ['#ef4444', '#ef4444', '#10b981'], // Red for negative (Shy/Mistakes), Green for positive (Belief)
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false }, datalabels: { color: 'white', anchor:'center' } },
+                    scales: { x: { min: 1, max: 5 } }
+                }
+            });
+
+            // ==========================================
+            // 5. CHART 3.4: EXTERNAL FACTORS (ENVIRONMENT)
+            // ==========================================
+            const externalItems = likertKeys.External; // D1...D4
+            const externalMeans = externalItems.map(k => calculateMean(k));
+
+            new Chart(document.getElementById('chartExternal'), {
+                type: 'bar',
+                data: {
+                    labels: externalItems.map(k => k), // D1, D2...
+                    datasets: [{
+                        label: 'Mean Score',
+                        data: externalMeans,
+                        backgroundColor: '#f59e0b',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    plugins: { 
+                        datalabels: { anchor: 'end', align: 'end' },
+                        tooltip: { callbacks: { title: (ctx) => itemLabels[ctx[0].label] } } // Show full text on hover
+                    },
+                    scales: { y: { min: 1, max: 5 } }
+                }
+            });
+
+            // ==========================================
+            // 6. CHART 3.5: ACTIVITIES PREFERENCES
+            // ==========================================
+            const actData = getColData('Activities');
             const actCounts = {};
-            actRaw.forEach(s => {
+            actData.forEach(s => {
                 if(s) s.toString().split(', ').forEach(a => actCounts[a] = (actCounts[a]||0) + 1);
             });
+            // Sort high to low
             const sortedActs = Object.entries(actCounts).sort((a,b) => b[1] - a[1]);
 
             new Chart(document.getElementById('chartActivities'), {
                 type: 'bar',
-                indexAxis: 'y',
                 data: {
                     labels: sortedActs.map(x => x[0]),
                     datasets: [{
+                        label: 'Frequency (Votes)',
                         data: sortedActs.map(x => x[1]),
-                        backgroundColor: '#00c6ff',
-                        borderRadius: 6
+                        backgroundColor: '#10b981',
+                        borderRadius: 5
                     }]
                 },
                 options: {
@@ -515,18 +461,53 @@
                 }
             });
 
-            // Feedback List
-            const fbIdx = headers.indexOf('Feedback');
-            if(fbIdx !== -1) {
-                const fbs = rawData.map(r => r[fbIdx]).filter(f => f).reverse().slice(0, 10);
-                const fbDiv = document.getElementById('feedbackList');
-                fbs.forEach(txt => {
-                    fbDiv.innerHTML += `
-                    <div style="background:#f8fafc; padding:15px; border-radius:15px; border:1px solid #e2e8f0; font-size:14px; color:#334155;">
-                        <i class="ri-double-quotes-l" style="color:#cbd5e1; font-size:20px;"></i> ${txt}
-                    </div>`;
-                });
+            // ==========================================
+            // 7. CHART 3.6: FEEDBACK CATEGORIZATION (KEYWORD ANALYSIS)
+            // ==========================================
+            const feedbacks = getColData('Feedback').filter(f => f && f.length > 3);
+            
+            // Simple Keyword Matching Algorithm
+            const categories = {
+                "Request More Games": 0,
+                "More Outdoor Activities": 0,
+                "Teaching Method (Slower/Support)": 0,
+                "Psychological (Shy/Afraid)": 0,
+                "Positive/Satisfied": 0,
+                "Others": 0
+            };
+
+            feedbacks.forEach(txt => {
+                const t = txt.toLowerCase();
+                if (t.includes('game') || t.includes('trò chơi')) categories["Request More Games"]++;
+                else if (t.includes('outdoor') || t.includes('ngoài trời')) categories["More Outdoor Activities"]++;
+                else if (t.includes('slow') || t.includes('chậm') || t.includes('teacher') || t.includes('cô')) categories["Teaching Method (Slower/Support)"]++;
+                else if (t.includes('shy') || t.includes('ngại') || t.includes('sợ') || t.includes('confident')) categories["Psychological (Shy/Afraid)"]++;
+                else if (t.includes('good') || t.includes('hay') || t.includes('thích') || t.includes('ổn')) categories["Positive/Satisfied"]++;
+                else categories["Others"]++;
+            });
+
+            // Remove zero categories for cleaner chart
+            const labelsFB = [], dataFB = [];
+            for (let [k, v] of Object.entries(categories)) {
+                if(v > 0) { labelsFB.push(k); dataFB.push(v); }
             }
+
+            new Chart(document.getElementById('chartFeedback'), {
+                type: 'bar',
+                indexAxis: 'y',
+                data: {
+                    labels: labelsFB,
+                    datasets: [{
+                        label: 'Mention Frequency',
+                        data: dataFB,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    plugins: { legend: {display:false}, datalabels: { anchor:'end', align:'end', color: '#8b5cf6' } }
+                }
+            });
         }
     </script>
 </body>
